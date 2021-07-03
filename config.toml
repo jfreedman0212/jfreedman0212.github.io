@@ -1,4 +1,4 @@
-baseURL = "https://jfreedman0212.github.io"
+baseURL = "https://jfreedman0212-github-io.vercel.app/"
 languageCode = "en-us"
 title = "Josh Freedman"
 theme = "hugo-ink"
