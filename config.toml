@@ -11,6 +11,7 @@ pygmentscodefencesguesssyntax = true
 [params]
     subtitle = "My personal archive for code snippets and ramblings about software and life"
     mode = "light"
+    featherIconsCDN = true
 
 [[menu.main]]
     name = "Home"
