@@ -1,3 +1,36 @@
-baseURL = "http://example.org/"
+baseURL = "https://freedman.dev/"
 languageCode = "en-us"
-title = "My New Hugo Site"
+title = "Josh Freedman"
+theme = "hugo-ink"
+paginate = 3
+
+pygmentsstyle = "solarized-dark"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
+
+[params]
+    subtitle = "My personal archive for code snippets and ramblings about software and life"
+    mode = "light"
+
+[[menu.main]]
+    name = "Home"
+    url = "/"
+    weight = 1
+
+[[menu.main]]
+    name = "All Posts"
+    url = "/posts"
+    weight = 2
+
+[[menu.main]]
+    name = "Tags"
+    url = "/tags"
+    weight = 3
+
+[[params.social]]
+    name = "GitHub"
+    icon = "github"
+    url = "https://github.com/jfreedman0212"
+
+[taxonomies]
+    tag = "tags"
