@@ -1,8 +1,9 @@
-baseURL = "https://jfreedman0212-github-io.vercel.app/"
+baseURL = "https://jfreedman0212.github.io/"
 languageCode = "en-us"
 title = "Josh Freedman"
 theme = "hugo-ink"
 paginate = 3
+copyright = "© Copyright notice"
 
 pygmentsstyle = "solarized-dark"
 pygmentscodefences = true
