@@ -34,5 +34,10 @@ pygmentscodefencesguesssyntax = true
     icon = "github"
     url = "https://github.com/jfreedman0212"
 
+[[params.social]]
+    name = "Twitter"
+    icon = "twitter"
+    url = "https://twitter.com/jfreedman0212"
+
 [taxonomies]
     tag = "tags"
