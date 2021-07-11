@@ -1,5 +1,5 @@
 ---
-title: "How Should You Handle Form Validation with React Hook Form?"
+title: "How Should You Handle Validation Rules with React Hook Form?"
 date: 2021-07-03T01:42:26-04:00
 description: "Considerations for how you define your validation rules"
 tags:
@@ -10,18 +10,8 @@ tags:
 
 [React Hook Form](https://react-hook-form.com) is a great library for managing form state
 in React. Getting started with it is simple, integrating with external libraries is (mostly)
-seamless, and performance optimizations are baked into the library's core design. However, I want
-to talk about validation in RHF.
-
-In RHF, there are two main ways you define validation rules:
-
-- Through passing a `rules` object to the individual fields (using the `register` or
-  `Controller` APIs)
-- Using a schema validation library like [Yup](https://github.com/jquense/yup)
-  or [Zod](https://github.com/colinhacks/zod) at the root of the form
-
-There isn't anything inherently wrong with either of these options, but both approaches
-are not suitable for all use cases, and there are tradeoffs involved in each decision.
+seamless, and performance optimizations are baked into the library's core design. Like any other
+good form library, it comes with tools for validating user input. RHF provides you two choices that might seem equivalent, but have different strengths/tradeoffs.
 
 # Rules API
 
@@ -31,7 +21,11 @@ rules on a **field level**. Using it with `register` would look something like:
 ```tsx
 <input
   type="number"
-  {...register("age", { required: true, min: 0, max: 150 })}
+  {...register("age", {
+    required: true,
+    min: 0,
+    max: 150
+  })}
 />
 ```
 
@@ -46,9 +40,12 @@ object you pass to it passes all of the rules associated with the schema. Since 
 data to a JS object, you can pass that data to a schema to perform validation. There are many
 libraries you can choose from for this, but I'll give an example of it with Yup:
 
-```tsx
+```ts
 const MySchema = Yup.object({
-  age: Yup.number().required().min(0).max(150),
+  age: Yup.number()
+    .required()
+    .min(0)
+    .max(150)
 });
 
 // then, within a component...
@@ -57,47 +54,45 @@ const methods = useForm({
 });
 ```
 
-The above is example is equivalent to the one using the Rules API. Depending on which library you
+The above example is equivalent to the one using the Rules API. Depending on which library you
 choose, the built in rules can be more than sufficient. But of course, they also provide tools
 for building your own if you need them.
 
 # Which Should You Choose?
 
-While both will let you define validation rules for your form, there are some questions you should
-consider before making your decision.
+While both will let you define validation rules for your form, there are some considerations to think about before coming to a decision (ordered by important).
 
-## What Role Does Bundle Size Play?
+## Level of Control
 
-When using Schema Validation, you will pull in at least two extra packages: the package for the
-schema validation library and `@hookform/resolvers` (assuming you use the pre-built ones, you
-can always build you own). This may be a problem for you, or the extra KiBs in your bundle are
-worth it due to the benefits of using such a library.
+When using the Rules API, you define your validation rules right on the field itself. Conversely,
+you define your rules at the top of the form when using a Schema Validation library.
 
-## What Level Should the Rules Be Defined At?
-
-Schema Validation forces you to define your rules up front _and then_ your actual fields, whereas
-the Rules API is on a per-field basis. I've found that the Rules API is more flexible for scenarios
-with many conditional fields because you only have to define the logic for conditional fields
+I've found that the Rules API is more flexible for scenarios with many conditional fields 
+because you only have to define the logic for conditional fields
 once: in your JSX. For Schema Validation, you have to define the logic for that field both
-in the JSX _and_ in the schema itself.
-
-On the flip side, if you want to re-use a related group of fields with different validations
+in the JSX _and_ in the schema itself. On the flip side, if you want to re-use a related group of fields with different validations
 between the forms you use them in, Schema Validation will be more flexible. This is because the
 form field definitions are separated from their rules, so you can "inject" whatever rules you
 want into those fields for any number of re-usages.
 
-## What is Convenient For Your Use Case?
+This may change between forms in your application, so adopting both approaches based on
+the requirements may be best (as opposed to choosing one for _all_ forms).
+
+## Built In Rules
 
 Schema Validation libraries will typically have more rules built into them than React Hook Form's
-Rules API will. Sure, you can always define your own rules, but that comes with its own mental
-overhead, especially when trying to build a complex feature. You have a lot on your mind, and
-trying to build a "is date in the past" rule, name it, and make it shareable to all of your other
-forms doesn't reduce complexity.
+Rules API will. Sure, you can always define your own rules, but then you have to write the code to validate the field,
+figure out how to share this rule for other places in your app, maintain it, and make many other decisions that distract
+from the feature you're just trying to add. Or, you could just call `Yup.string().email()` and be done with it. 
+
+## Bundle Size
+
+When using Schema Validation, you will pull in at least two extra packages: the package for the
+schema validation library and `@hookform/resolvers` (assuming you use the pre-built ones, you
+can always build you own). This will increase the size of the code being shipped (as bringing
+in any packages will).
 
 ---
 
-While it may be tempting to choose one over the other for consistency's sake, I believe it is
-better to choose whatever solves your current problem the best. So, use a mix of the two in your
-app. I'd rather learn the two approaches but have an easier time modifying a form than
-try to wade through a hacky usage of a tool that was forced to do something it wasn't designed
-to do.
+As with every other decision, weigh the benefits of each approach with the tradeoffs for your 
+use case. The end goal of every decision is to make it as easy as possible to build and maintain.
