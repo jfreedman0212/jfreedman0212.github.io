@@ -60,7 +60,7 @@ for building your own if you need them.
 
 # Which Should You Choose?
 
-While both will let you define validation rules for your form, there are some considerations to think about before coming to a decision (ordered by important).
+While both will let you define validation rules for your form, there are some considerations to think about before coming to a decision (ordered by importance).
 
 ## Level of Control
 
